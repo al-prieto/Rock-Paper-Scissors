@@ -1,56 +1,84 @@
-function getHumanChoice(){
-    return window.prompt("Play!")
+function getHumanChoice() {
+  return window.prompt("Play!");
 }
-let humanSelection = getHumanChoice().toLowerCase();
-
-console.log(humanSelection)
 
 function getComputerChoice(min, max) {
-    let num = Math.floor(Math.random() * (max - min + 1)) + min;
-    if (num === 1) {
-        return "rock";    
-    } else if (num === 2) {
-        return "paper"
-    } else { 
-        return "scissors"
-    }
+  let num = Math.floor(Math.random() * (max - min + 1)) + min;
+  if (num === 1) {
+    return "rock";
+  } else if (num === 2) {
+    return "paper";
+  } else {
+    return "scissors";
+  }
 }
-
-
-  
-let computerSelection = getComputerChoice(1, 3); // Genera un número entre 1 y 10
-
-console.log(computerSelection);
-
-
-
-
-
-let humanScore = 0;
-let computerScore = 0;
 
 function playRound(humanChoice, computerChoice) {
-    if (humanChoice === "rock" && computerChoice === "paper") {
-        return "You lose! Paper beats Rock";
-    } else if (humanChoice === "rock" && computerChoice === "scissors") {
-        return "You win! Rock beats Scissors"
-    } else if (humanChoice === "rock" && computerChoice === "rock") {
-        return "Draw!"
-    } else if (humanChoice === "paper" && computerChoice === "scissors") {
-        return "You lose! Scissors beats Paper"
-    } else if (humanChoice === "paper" && computerChoice === "rock") {
-        return "You win! Paper beats Rock"
-    } else if (humanChoice === "paper" && computerChoice === "paper") {
-        return "Draw!"
-    } else if (humanChoice === "scissors" && computerChoice === "rock") {
-        return "You lose! Rock beats Scissors"
-    } else if (humanChoice === "scissors" && computerChoice === "paper") {
-        return "You win! Scissors beats Paper"
-    } else if (humanChoice === "scissors" && computerChoice === "scissors") {
-        return "Draw!"
-    } else {
-        return "Try again!"
-    }
+  let result;
+
+  if (humanChoice === "rock" && computerChoice === "paper") {
+    result = ["You lose! Paper beats Rock", -1];
+  } else if (humanChoice === "rock" && computerChoice === "scissors") {
+    result = ["You win! Rock beats Scissors", 1];
+  } else if (humanChoice === "rock" && computerChoice === "rock") {
+    result = ["Draw!", 0];
+  } else if (humanChoice === "paper" && computerChoice === "scissors") {
+    result = ["You lose! Scissors beats Paper", -1];
+  } else if (humanChoice === "paper" && computerChoice === "rock") {
+    result = ["You win! Paper beats Rock", 1];
+  } else if (humanChoice === "paper" && computerChoice === "paper") {
+    result = ["Draw!", 0];
+  } else if (humanChoice === "scissors" && computerChoice === "rock") {
+    result = ["You lose! Rock beats Scissors", -1];
+  } else if (humanChoice === "scissors" && computerChoice === "paper") {
+    result = ["You win! Scissors beats Paper", 1];
+  } else if (humanChoice === "scissors" && computerChoice === "scissors") {
+    result = ["Draw!", 0];
+  } else {
+    result = ["Try again!", null];
+  }
+
+  return result;
 }
 
-console.log(playRound(humanSelection, computerSelection))
+function playGame() {
+  let humanScore = 0;
+  let computerScore = 0;
+  let scores = [humanScore, computerScore];
+  for (let i = 0; i < 5; i++) {
+    let humanSelection = getHumanChoice().toLowerCase();
+    let computerSelection = getComputerChoice(1, 3);
+    let result = playRound(humanSelection, computerSelection);
+
+    if (result[1] === 1) {
+      humanScore += 1;
+    } else if (result[1] === -1) {
+      computerScore += 1;
+    }
+
+    scores[0] = humanScore;
+    scores[1] = computerScore;
+
+    console.log(humanSelection, computerSelection, result[0], scores);
+  }
+
+  return scores;
+}
+
+function determineWinner(scores) {
+  let baseMessage = `Final Scores: Human ${scores[0]}, Computer ${scores[1]}\n`;
+
+  if (scores[0] > scores[1]) {
+    return `${baseMessage}You won! 🎉`;
+  } else if (scores[0] < scores[1]) {
+    return `${baseMessage}Haha, I beat you!🤖`;
+  } else {
+    return `${baseMessage}Well played, it's a draw! 🤝`;
+  }
+}
+
+let finalScores = playGame();
+let resultMessage = determineWinner(finalScores);
+
+console.log(resultMessage.split("\n")[0]);
+alert(resultMessage);
