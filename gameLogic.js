@@ -1,6 +1,7 @@
-function getHumanChoice() {
-  return window.prompt("Play!");
-}
+const rockButton = document.querySelector("#rock");
+const paperButton = document.querySelector("#paper");
+const scissorsButton = document.querySelector("#scissors");
+const displayResults = document.querySelector("#results");
 
 function getComputerChoice(min, max) {
   let num = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -37,7 +38,7 @@ function playRound(humanChoice, computerChoice) {
   } else {
     result = ["Try again!", null];
   }
-
+  displayResults.innerText = `Human choice: ${humanChoice}\nComputer choice: ${computerChoice}\nResult: ${result[0]}`;
   return result;
 }
 
@@ -82,3 +83,18 @@ let resultMessage = determineWinner(finalScores);
 
 console.log(resultMessage.split("\n")[0]);
 alert(resultMessage);
+
+rockButton.addEventListener("click", () => {
+  let computerChoice = getComputerChoice();
+  playRound("rock", computerChoice);
+});
+
+paperButton.addEventListener("click", () => {
+  let computerChoice = getComputerChoice();
+  playRound("paper", computerChoice);
+});
+
+scissorsButton.addEventListener("click", () => {
+  let computerChoice = getComputerChoice();
+  playRound("scissors", computerChoice);
+});
